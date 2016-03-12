@@ -1,0 +1,29 @@
+{
+  "name": "genius-graph",
+  "version": "1.0.0",
+  "description": "not sure yet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hannah Reiss",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.3.3",
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
+    "csurf": "^1.8.3",
+    "express": "^4.13.4",
+    "express-stormpath": "^3.0.0",
+    "forms": "^1.1.4",
+    "genius-api": "^0.3.0",
+    "jQuery": "^1.7.4",
+    "jade": "^1.11.0",
+    "jquery": "^2.2.1",
+    "jsdom": "^8.1.0",
+    "promise-map-series": "^0.2.2",
+    "request": "^2.69.0",
+    "underscore": "^1.8.3",
+    "xtend": "^4.0.1"
+  }
+}
