@@ -11,7 +11,7 @@ var Artist = require('../models/artist.js');
 var artistString;
 
 
-var genius = new api(config.api_key);
+var genius = new api("a4BwypQz8wOqj52SBxOWwJqabyDuAhL6h6WbNY-KwyI5RIpvSMH3Als0PLBQ9LuI");
 
 function initialize(input, length){
 	nodes.length = 0;
