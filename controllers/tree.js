@@ -27,13 +27,19 @@ function initialize(input, length){
 
 	function getArtist(genius, artist){
 		genius.search(artist.substring(0, artist.length-1)).then(function(response) {
-			var artist_search_term = artist.trim();
+			var artist_search_term = artist.toLowerCase().trim();
 			for (var hit of response.hits){
-				if ((hit.result.primary_artist.name.search(artist_search_term) != -1) && (hit.result.primary_artist.name.length - artist_search_term.length < 2)){
+				console.log("search term: "+artist_search_term);
+				console.log("result: "+hit.result.primary_artist.name);
+				if ((hit.result.primary_artist.name.toLowerCase().search(artist_search_term) != -1) && (hit.result.primary_artist.name.length - artist_search_term.length < 2)){
 					var my_artist = hit;
 					break;
 				}
 			}
+
+			if (!my_artist)
+				return;
+			
 			var artist_id = my_artist["result"]["primary_artist"]["id"];
 			var artist_name = my_artist["result"]["primary_artist"]["name"];
 			var image_url = my_artist.result.primary_artist.image_url;
