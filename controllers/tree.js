@@ -1,5 +1,5 @@
 var api = require('genius-api');
-var bodyParser = require('body-parser');
+
 var vis = require("../public/libs/vis/vis.js");
 var express = require('express');
 var forms = require('forms');
@@ -39,7 +39,7 @@ function initialize(input, length){
 
 			if (!my_artist)
 				return;
-			
+
 			var artist_id = my_artist["result"]["primary_artist"]["id"];
 			var artist_name = my_artist["result"]["primary_artist"]["name"];
 			var image_url = my_artist.result.primary_artist.image_url;
@@ -149,6 +149,7 @@ function renderGraph(req,res,next){
 
 function findArtists(req, res, next){
 	console.log('finding artists')
+	console.log(req.body)
 	artistString = req.body.artistString.split(", ");
 	var input_length = artistString.length;
 	initialize(artistString, input_length);

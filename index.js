@@ -1,5 +1,4 @@
 var express = require('express');
-
 var bodyParser = require('body-parser')
 var app = express();
 
@@ -14,7 +13,8 @@ app.get('/', function(req, res) {
   });
 });
 
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/tree', require('./controllers/tree')());
 app.use('/tree_view', require('./controllers/tree')());
