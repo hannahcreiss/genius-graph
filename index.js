@@ -19,6 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/tree', require('./controllers/tree')());
 app.use('/tree_view', require('./controllers/tree')());
 
-
-
-app.listen(3000);
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
