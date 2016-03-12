@@ -11,7 +11,7 @@ var Artist = require('../models/artist.js');
 var artistString;
 
 
-var genius = new api("a4BwypQz8wOqj52SBxOWwJqabyDuAhL6h6WbNY-KwyI5RIpvSMH3Als0PLBQ9LuI");
+var genius = new api(config.api_key);
 
 function initialize(input, length){
 	nodes.length = 0;
@@ -148,8 +148,6 @@ function renderGraph(req,res,next){
 }	
 
 function findArtists(req, res, next){
-	console.log('finding artists')
-	console.log(req.body)
 	artistString = req.body.artistString.split(", ");
 	var input_length = artistString.length;
 	initialize(artistString, input_length);
