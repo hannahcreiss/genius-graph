@@ -10,7 +10,6 @@ var config = require('../config.js');
 var Artist = require('../models/artist.js');
 var artistString;
 
-
 var genius = new api(config.api_key);
 
 function initialize(input, length){
@@ -164,8 +163,6 @@ module.exports = function tree(){
   router.get('/', function(req, res) {
   	res.render('tree', {set:false});
   });
-
-
 
   router.post('/', findArtists, renderGraph);
 

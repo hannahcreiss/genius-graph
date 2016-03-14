@@ -6,9 +6,8 @@ app.set('views', './views');
 app.set('view engine', 'jade');
 app.use(express.static(__dirname + '/public'))
 
-
 app.get('/', function(req, res) {
-  res.render('home', {
+  res.render('tree', {
     title: 'Welcome', scripts: ['/public/libs/vis/vis.js']
   });
 });
@@ -16,7 +15,7 @@ app.get('/', function(req, res) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/tree', require('./controllers/tree')());
+app.use('/', require('./controllers/tree')());
 app.use('/tree_view', require('./controllers/tree')());
 
 app.listen(process.env.PORT || 3000, function(){
