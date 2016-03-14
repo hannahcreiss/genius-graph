@@ -8,7 +8,7 @@ app.use(express.static(__dirname + '/public'))
 
 app.get('/', function(req, res) {
   res.render('tree', {
-    title: 'Welcome', scripts: ['/public/libs/vis/vis.js']
+    title: 'Genius Graph', scripts: ['/public/libs/vis/vis.js']
   });
 });
 
