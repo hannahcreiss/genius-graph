@@ -148,7 +148,7 @@ function renderGraph(req,res,next){
 }	
 
 function findArtists(req, res, next){
-	artistString = req.body.artistString.split(", ");
+	artistString = req.body.artistString.split(",");
 	var input_length = artistString.length;
 	initialize(artistString, input_length);
 	setTimeout(next, 8000)

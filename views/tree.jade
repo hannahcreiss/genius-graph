@@ -17,9 +17,9 @@ html
     div.container
       div.jumbotron
         h2 My Genius Graph
+        h4 Enter a list of artists separated by a comma.
         form.form-horizontal(method='post', role='form')
          div.form-group
-          label.col-sm-4 Artists
           div.col-sm-8
             input.form-control(
               placeholder='My faves',
@@ -27,7 +27,7 @@ html
               name='artistString',
               type='text',
               value=artistString)
-         div.col-sm-offset-4.col-sm-8
+          div.col-sm-4
             button.login.btn.btn-primary(type='submit') Submit      
 
     #mynetwork
