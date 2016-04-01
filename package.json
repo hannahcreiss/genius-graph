@@ -16,7 +16,8 @@
     "genius-api": "^0.3.0",
     "jade": "^1.11.0",
     "lodash": "^4.6.1",
-    "mongodb": "^2.1.7"
+    "mongodb": "^2.1.7",
+    "node-env-file": "^0.1.8"
   },
   "engines": {
     "node": "5.7.0"

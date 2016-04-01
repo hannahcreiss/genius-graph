@@ -6,8 +6,17 @@ var ObjectId = require('mongodb').ObjectID;
 var app = express();
 var artistNames = [];
 var artistIDs = {};
-var config = require('./config.js');
-var uri = config.db_uri
+
+//use node-env-file package to set up config variables locally
+var fs = require('fs'),
+    env = require('node-env-file')
+    
+if (fs.existsSync(__dirname + '/.env' )) {
+  env(__dirname + '/.env')
+}
+
+var uri = process.env.MONGOLAB_URI;
+
 
 var queryArtists = function(db, callback) {
    var cursor =db.collection('artists').find( );

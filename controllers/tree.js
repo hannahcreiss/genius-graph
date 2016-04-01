@@ -10,7 +10,7 @@ var edges = [];
 var config = require('../config.js');
 var Artist = require('../models/artist.js');
 
-var genius = new api(config.api_key);
+var genius = new api(process.env.API_KEY);
 
 
 function initialize(input){
@@ -140,7 +140,7 @@ function initialize(input){
 		});
 	}
 
-	setTimeout(checkRelationship, 15000)
+	setTimeout(checkRelationship, 5000)
 }
 
 
@@ -159,7 +159,7 @@ function renderGraph(req,res,next){
 function findArtists(req, res, next){
 	var artistString = req.body.artistString.split(",");
 	initialize(artistString);
-	setTimeout(next, 20000)
+	setTimeout(next, 10000)
 } 
 
 // Export a function which will create the
