@@ -1,17 +1,14 @@
 var api = require('genius-api');
 var InputModule = require('../index.js')
-
 var vis = require("../public/js/vis/vis.js");
 var express = require('express');
 var forms = require('forms');
 var set = false;
 var nodes = [];
 var edges = [];
-var config = require('../config.js');
 var Artist = require('../models/artist.js');
 
 var genius = new api(process.env.API_KEY);
-
 
 function initialize(input){
 	console.log("initializing")
