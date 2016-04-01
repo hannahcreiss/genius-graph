@@ -29,6 +29,16 @@ html
     (function(){
         var artistNames = !{JSON.stringify(artistNames)};
         $('#demo').tokens({
+          keyCode : {
+            UP: 38,
+            DOWN: 40,
+            BACKSPACE: 8,
+            TAB: 9,
+            ENTER: 13,
+            ESC: 27,
+            COMMA: 188,
+            SPACE: 0
+          },
           texts : {
             'close-text' : '×',
             'type-suggestions' : 'Start typing an artist\'s name',
