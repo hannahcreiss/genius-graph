@@ -1,6 +1,7 @@
 var api = require('genius-api');
+var InputModule = require('../index.js')
 
-var vis = require("../public/libs/vis/vis.js");
+var vis = require("../public/js/vis/vis.js");
 var express = require('express');
 var forms = require('forms');
 var set = false;
@@ -8,80 +9,88 @@ var nodes = [];
 var edges = [];
 var config = require('../config.js');
 var Artist = require('../models/artist.js');
-var artistString;
 
 var genius = new api(config.api_key);
 
-function initialize(input, length){
+
+function initialize(input){
+	console.log("initializing")
+	var artistIDs = InputModule.artistIDs
 	nodes.length = 0;
 	edges.length = 0;
 	var artists = [];
 	var lookup_nodes = [];
 	var lookup_edges = [];
 	var a = 0;
+	console.log(input);
 
 	for (var i in input){
-		getArtist(genius, input[i]);
+		console.log(input[i]);
+		var lookup_id = artistIDs[input[i]];
+		console.log(lookup_id);
+		getArtist(lookup_id, input[i])
 	}
 
-	function getArtist(genius, artist){
-		genius.search(artist.substring(0, artist.length-1)).then(function(response) {
-			var artist_search_term = artist.toLowerCase().trim();
-			for (var hit of response.hits){
-				console.log("search term: "+artist_search_term);
-				console.log("result: "+hit.result.primary_artist.name);
-				if ((hit.result.primary_artist.name.toLowerCase().search(artist_search_term) != -1) && (hit.result.primary_artist.name.length - artist_search_term.length < 2)){
-					var my_artist = hit;
-					break;
-				}
-			}
 
-			if (!my_artist)
-				return;
-
-			var artist_id = my_artist["result"]["primary_artist"]["id"];
-			var artist_name = my_artist["result"]["primary_artist"]["name"];
-			var image_url = my_artist.result.primary_artist.image_url;
+	//todo: make the performance a lot better
+	//figure out why you sometimes get error responses from the genius api
+	function getArtist(artist_id, artist_name){
+			var image_url;
 			var new_artist = new Artist(artist_id, artist_name);
-			var artist_node = 
-			{
-				id: parseInt(artist_id, 10), 
-				shape: 'circularImage', 
-				color: {
-					border: "#CCCCCC"
-				},
-				image: image_url, 
-				brokenImage: "http://a4.mzstatic.com/us/r30/Purple49/v4/be/7b/f9/be7bf9d9-6993-67cb-5756-f291501d5837/icon175x175.jpeg", 
-				label: artist_name
-			};
-			nodes.push(artist_node)
-			addNewArtist(new_artist, 1, true);
-		});
+			
+			genius.artist(artist_id).then(function(response) {
+  				image_url = response.artist.image_url;
+			}).then(function(){
+
+				var artist_node = 
+				{
+					id: parseInt(artist_id, 10), 
+					shape: 'circularImage', 
+					color: {
+						border: "#CCCCCC"
+					},
+				    image: image_url, 
+					brokenImage: "http://a4.mzstatic.com/us/r30/Purple49/v4/be/7b/f9/be7bf9d9-6993-67cb-5756-f291501d5837/icon175x175.jpeg", 
+					label: artist_name
+				};
+				nodes.push(artist_node)
+			});
+
+			addNewArtist(new_artist, artist_id, 1, false);
+			addNewArtist(new_artist, artist_id, 2, false);
+			addNewArtist(new_artist, artist_id, 3, false);
+			addNewArtist(new_artist, artist_id, 4, false);
+			addNewArtist(new_artist, artist_id, 5, false);
+			addNewArtist(new_artist, artist_id, 6, true);
+		
+
 	};	
 
-	function addNewArtist(artist, page_num, repeat){
-		genius.songsByArtist(artist.getID(), {"sort":"popularity", "per_page":"50", "page":String(page_num)}).then(function(response){
+	function addNewArtist(artist, id, page_num, done){
+
+		genius.songsByArtist(id, {"sort":"popularity", "per_page":"50", "page":String(page_num)}).then(function(response){
 			var own_songs = [];
 			a=a+1;
 			for (var song of response.songs){
-				if (song["primary_artist"]["id"]==artist.getID()){
-					own_songs.push(song["id"]);
+				if (song.primary_artist.id==id){
+					own_songs.push(song.id);
 				}
 			}
-
+			var name = artist.getName();
+			console.log(name + ": " + own_songs.length +" songs")
 			artist.setOwnSongs(own_songs);
 		
 		}).then(function(){
-			if (repeat){
-				addNewArtist(artist, 2, false);
-			}else{
+			if (done){
 				artists.push(artist);
+				console.log("added new artist")
 			}
 		
 		});
 	};
 
 	function checkRelationship(){
+		console.log("checking relationship")
 		for (var this_artist of artists){
 			for (var song of this_artist.getOwnSongs()){
 				checkSongInfo(song);
@@ -131,7 +140,7 @@ function initialize(input, length){
 		});
 	}
 
-	setTimeout(checkRelationship, 5000)
+	setTimeout(checkRelationship, 15000)
 }
 
 
@@ -143,14 +152,14 @@ var artistsForm = forms.create({
 
 function renderGraph(req,res,next){
 	console.log("render graph function");
+	console.log("number of nodes", nodes.length)
 	res.render('done_tree', {'nodes': nodes, 'edges': edges, set:true});
 }	
 
 function findArtists(req, res, next){
-	artistString = req.body.artistString.split(",");
-	var input_length = artistString.length;
-	initialize(artistString, input_length);
-	setTimeout(next, 8000)
+	var artistString = req.body.artistString.split(",");
+	initialize(artistString);
+	setTimeout(next, 20000)
 } 
 
 // Export a function which will create the
@@ -159,10 +168,6 @@ function findArtists(req, res, next){
 module.exports = function tree(){
 
   var router = express.Router();
-
-  router.get('/', function(req, res) {
-  	res.render('tree', {set:false});
-  });
 
   router.post('/', findArtists, renderGraph);
 
